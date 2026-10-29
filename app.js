@@ -84,23 +84,32 @@
   }
   function statusText(it) {
     if (it.status === 'OPERATING') return it.wait != null ? { t: it.wait + '分', c: it.wait >= 60 ? 'bad' : it.wait >= 30 ? 'mid' : 'good' } : { t: '運営中', c: 'good' };
-    if (it.status === 'UNKNOWN') return { t: '情報なし', c: 'off' };
+    if (it.status === 'UNKNOWN') return { t: '時間は公式で', c: 'off' };
     if (it.status === 'DOWN') return { t: '一時休止', c: 'warn' };
     if (it.status === 'REFURBISHMENT') return { t: '整備中', c: 'off' };
     return { t: '本日は休止', c: 'off' };
   }
-  function render() { try { render0(); } catch (e) { var d = $('dbg'); if (d) d.textContent = 'v3 表示エラー: ' + e.message; } }
+  function render() { try { render0(); } catch (e) { var d = $('dbg'); if (d) d.textContent = 'v4 表示エラー: ' + e.message; } }
   function render0() {
     var upd = data.at ? tokyoTime(data.at) : '';
     $('stat').textContent = data.items.length ? ('現地 ' + upd + ' 更新' + (data.ok ? '' : '（通信できず・前回の情報）')) : (data.ok === false ? '情報を取得できませんでした' : '');
     $('hours').textContent = data.hours ? '本日の営業 ' + data.hours[0] + '〜' + data.hours[1] : '';
     var rows = data.items.map(function (it) {
       var d = lookup(it.en);
-      return { it: it, ja: d ? d[1] : it.en, land: d ? d[2] : 8, known: !!d, kind: kindOf(it, d), s: statusText(it) };
+      return { it: it, ja: d ? d[1] : it.en, land: d ? d[2] : 8, known: !!d, kind: kindOf(it, d), note: d && d[4] ? d[4] : '', s: statusText(it) };
     }).filter(function (r) {
       if (st.filter !== 'all' && r.kind !== st.filter) return false;
       if (st.onlyFav && !st.favs[r.it.id]) return false;
       return true;
+    });
+    SEA_STATIC.forEach(function (x, i) {
+      var hit = data.items.some(function (it) { return (it.en || '').toLowerCase().indexOf(x.match) >= 0; });
+      if (hit) return;
+      var fake = { id: 'st' + i, en: x.ja, type: 'STATIC', status: 'STATIC', wait: null, shows: [] };
+      var r = { it: fake, ja: x.ja, land: x.land, known: false, kind: 'greet', note: x.note, s: { t: '時間は公式で', c: 'off' } };
+      if (st.filter !== 'all' && st.filter !== 'greet') return;
+      if (st.onlyFav && !st.favs[fake.id]) return;
+      rows.push(r);
     });
     rows.sort(function (a, b) {
       var fa = st.favs[a.it.id] ? 0 : 1, fb = st.favs[b.it.id] ? 0 : 1; if (fa !== fb) return fa - fb;
@@ -109,12 +118,12 @@
       return a.ja < b.ja ? -1 : 1;
     });
     $('list').innerHTML = rows.length ? rows.map(function (r) {
-      var shows = r.kind !== 'att' && r.it.shows.length ? '<div class="sub">' + r.it.shows.map(tokyoTime).join(' / ') + '</div>' : '';
+      var shows = (r.kind !== 'att' && r.it.shows.length ? '<div class="sub">今日の開始時間：' + r.it.shows.map(tokyoTime).join(' / ') + '</div>' : '') + (r.note ? '<div class="sub">' + esc(r.note) + (r.kind === 'show' && !r.it.shows.length ? '／時間は公式アプリで確認' : '') + '</div>' : '');
       return '<div class="row"><button class="star" data-id="' + esc(r.it.id) + '" aria-pressed="' + !!st.favs[r.it.id] + '" aria-label="やりたい">' + (st.favs[r.it.id] ? '★' : '☆') + '</button>' +
         '<div class="nm"><div class="ja">' + esc(r.ja) + '</div>' + (r.known ? '' : '') + '<div class="en">' + esc(r.known ? r.it.en : '') + '</div><div class="land">' + esc(SEA_LANDS[r.land]) + (r.kind === 'show' ? '・ショー' : r.kind === 'greet' ? '・グリーティング' : '') + '</div>' + shows + '</div>' +
         '<div class="w ' + r.s.c + '">' + esc(r.s.t) + '</div></div>';
     }).join('') : '<p class="empty">' + (data.items.length ? '該当なし' : '読み込み中、または情報がありません') + '</p>';
-    var dbg = $('dbg'); if (dbg) dbg.textContent = data.types ? 'v3 取得した種類: ' + Object.keys(data.types).map(function (k) { return k + ' ' + data.types[k]; }).join(' / ') : '';
+    var dbg = $('dbg'); if (dbg) dbg.textContent = data.types ? 'v4 取得した種類: ' + Object.keys(data.types).map(function (k) { return k + ' ' + data.types[k]; }).join(' / ') : '';
     ['all', 'att', 'show', 'greet'].forEach(function (f) { $('f_' + f).setAttribute('aria-pressed', st.filter === f); });
     $('f_fav').setAttribute('aria-pressed', st.onlyFav);
   }
