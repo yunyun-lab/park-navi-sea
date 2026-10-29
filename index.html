@@ -19,6 +19,6 @@ main{padding:12px 16px 40px}.row{display:flex;align-items:center;gap:10px;backgr
 .empty{color:var(--sub);text-align:center;padding:30px 0}.note{font-size:12px;color:var(--sub);margin-top:14px}
 </style></head><body><div class="app">
 <header><h1>シー待ち時間ナビ</h1><div class="meta"><span id="stat"></span><span id="hours"></span></div>
-<div class="bar"><button id="f_all" aria-pressed="true">すべて</button><button id="f_att" aria-pressed="false">乗り物</button><button id="f_show" aria-pressed="false">ショー</button><button id="f_fav" aria-pressed="false">★だけ</button><button id="reload">更新</button></div></header>
-<main><div id="list"></div><p class="note">待ち時間は ThemeParks.wiki の公開データ（5分ごと更新）です。公式アプリの表示と数分ずれることがあります。日本語名は辞書にあるものだけ表示し、ないものは英語名のままです。</p></main></div>
+<div class="bar"><button id="f_all" aria-pressed="true">すべて</button><button id="f_att" aria-pressed="false">乗り物</button><button id="f_show" aria-pressed="false">ショー</button><button id="f_greet" aria-pressed="false">グリーティング</button><button id="f_fav" aria-pressed="false">★だけ</button><button id="reload">更新</button></div></header>
+<main><div id="list"></div><p class="note" id="dbg"></p><p class="note">待ち時間は ThemeParks.wiki の公開データ（5分ごと更新）です。公式アプリの表示と数分ずれることがあります。日本語名は辞書にあるものだけ表示し、ないものは英語名のままです。</p></main></div>
 <script src="data.js"></script><script src="app.js"></script></body></html>
