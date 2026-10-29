@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E6B8C"><meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-180.png">
+<title>シー待ち時間ナビ</title>
+<style>
+:root{--bg:#F2F6F8;--card:#fff;--ink:#14212B;--sub:#4A5A66;--line:#D6E0E6;--acc:#0E6B8C;--good:#146C3A;--mid:#8A5A00;--bad:#A31D1D;--off:#5B6670;--warn:#8A4200}
+@media(prefers-color-scheme:dark){:root{--bg:#0F161B;--card:#18222A;--ink:#E8EEF2;--sub:#A9B7C1;--line:#2A3843;--acc:#6CC3E0;--good:#7BD99B;--mid:#F2C46B;--bad:#FF9A9A;--off:#9AA7B1;--warn:#FFC98A}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Noto Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif}
+.app{max-width:560px;margin:0 auto}header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;z-index:2}
+h1{margin:0;font-size:20px}.meta{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--sub);margin-top:2px}
+.bar{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.bar button{min-height:40px;padding:0 14px;border-radius:20px;border:1px solid var(--line);background:var(--card);font:inherit;color:inherit}
+.bar button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+@media(prefers-color-scheme:dark){.bar button[aria-pressed=true]{color:#0A1A22}}
+main{padding:12px 16px 40px}.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.star{width:44px;height:44px;border:0;background:none;font-size:26px;color:var(--acc);flex:none}.nm{flex:1;min-width:0}
+.ja{font-weight:700;line-height:1.3}.en{font-size:12px;color:var(--sub)}.land{font-size:12px;color:var(--sub)}.sub{font-size:12px;color:var(--sub);margin-top:2px}
+.w{font-weight:700;font-size:18px;white-space:nowrap;text-align:right}.good{color:var(--good)}.mid{color:var(--mid)}.bad{color:var(--bad)}.off{color:var(--off);font-size:13px}.warn{color:var(--warn);font-size:14px}
+.empty{color:var(--sub);text-align:center;padding:30px 0}.note{font-size:12px;color:var(--sub);margin-top:14px}
+</style></head><body><div class="app">
+<header><h1>シー待ち時間ナビ</h1><div class="meta"><span id="stat"></span><span id="hours"></span></div>
+<div class="bar"><button id="f_all" aria-pressed="true">すべて</button><button id="f_att" aria-pressed="false">乗り物</button><button id="f_show" aria-pressed="false">ショー</button><button id="f_fav" aria-pressed="false">★だけ</button><button id="reload">更新</button></div></header>
+<main><div id="list"></div><p class="note">待ち時間は ThemeParks.wiki の公開データ（5分ごと更新）です。公式アプリの表示と数分ずれることがあります。日本語名は辞書にあるものだけ表示し、ないものは英語名のままです。</p></main></div>
+<script src="data.js"></script><script src="app.js"></script></body></html>
