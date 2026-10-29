@@ -89,7 +89,8 @@
     if (it.status === 'REFURBISHMENT') return { t: '整備中', c: 'off' };
     return { t: '本日は休止', c: 'off' };
   }
-  function render() {
+  function render() { try { render0(); } catch (e) { var d = $('dbg'); if (d) d.textContent = 'v3 表示エラー: ' + e.message; } }
+  function render0() {
     var upd = data.at ? tokyoTime(data.at) : '';
     $('stat').textContent = data.items.length ? ('現地 ' + upd + ' 更新' + (data.ok ? '' : '（通信できず・前回の情報）')) : (data.ok === false ? '情報を取得できませんでした' : '');
     $('hours').textContent = data.hours ? '本日の営業 ' + data.hours[0] + '〜' + data.hours[1] : '';
@@ -113,7 +114,7 @@
         '<div class="nm"><div class="ja">' + esc(r.ja) + '</div>' + (r.known ? '' : '') + '<div class="en">' + esc(r.known ? r.it.en : '') + '</div><div class="land">' + esc(SEA_LANDS[r.land]) + (r.kind === 'show' ? '・ショー' : r.kind === 'greet' ? '・グリーティング' : '') + '</div>' + shows + '</div>' +
         '<div class="w ' + r.s.c + '">' + esc(r.s.t) + '</div></div>';
     }).join('') : '<p class="empty">' + (data.items.length ? '該当なし' : '読み込み中、または情報がありません') + '</p>';
-    var dbg = $('dbg'); if (dbg) dbg.textContent = data.types ? '取得した種類: ' + Object.keys(data.types).map(function (k) { return k + ' ' + data.types[k]; }).join(' / ') : '';
+    var dbg = $('dbg'); if (dbg) dbg.textContent = data.types ? 'v3 取得した種類: ' + Object.keys(data.types).map(function (k) { return k + ' ' + data.types[k]; }).join(' / ') : '';
     ['all', 'att', 'show', 'greet'].forEach(function (f) { $('f_' + f).setAttribute('aria-pressed', st.filter === f); });
     $('f_fav').setAttribute('aria-pressed', st.onlyFav);
   }
